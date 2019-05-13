@@ -11,11 +11,11 @@ def peak_dynamics(files):
     
     prev_peaks = read_peaks(files[0])
     n_peaks.append(prev_peaks.shape[0])
-    mean_len.append(np.mean(prev_peaks[:, 2] - prev_peaks[:, 2]))
+    mean_len.append(np.mean(prev_peaks[:, 2] - prev_peaks[:, 1]))
     
     for i in range(1, len(files)):
         peaks = read_peaks(files[i])
-        mean_len.append(np.mean(peaks[:, 2] - peaks[:, 2]))
+        mean_len.append(np.mean(peaks[:, 2] - peaks[:, 1]))
         n_peaks.append(peaks.shape[0])
         
         curr_splitted = 0
