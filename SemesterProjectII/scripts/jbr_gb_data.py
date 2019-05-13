@@ -45,6 +45,60 @@ class AlgorithmsStats:
         }
     }
     
+    pc_similarity_data = {
+        'FDR 0.05' : {
+            'macs2' : {
+                'sicer' : {'h3k4me1' : [99.1, 94.78],
+                           'h3k4me3' : [93.08, 94.08],
+                           'h3k27ac' : [93.87, 86.09],
+                           'h3k27me3' : [63.56, 52.21],
+                           'h3k36me3' : [96.11, 88.38]},
+                'span' : {'h3k4me1' : [88.01, 69.21],
+                           'h3k4me3' : [80.7, 73.62],
+                           'h3k27ac' : [87.6, 68.14],
+                           'h3k27me3' : [43.76, 27.33],
+                           'h3k36me3' : [84.77, 59.34]}
+            },
+            'sicer' : {
+                'macs2' : {'h3k4me1' : [87.67, 91.41],
+                           'h3k4me3' : [93.47, 95.16],
+                           'h3k27ac' : [86.18, 92.8],
+                           'h3k27me3' : [92.88, 96.79],
+                           'h3k36me3' : [91.5, 92.86]},
+                'span' : {'h3k4me1' : [73.96, 64.23],
+                           'h3k4me3' : [79.94, 73.88],
+                           'h3k27ac' : [76.6, 68.66],
+                           'h3k27me3' : [56.06, 44.25],
+                           'h3k36me3' : [73.1, 56.36]}
+            },
+            'span' : {
+                'macs2' : {'h3k4me1' : [99.67, 100],
+                           'h3k4me3' : [99.88, 100],
+                           'h3k27ac' : [97.3, 99.72],
+                           'h3k27me3' : [99.78, 100],
+                           'h3k36me3' : [98.92, 99.97]},
+                'sicer' : {'h3k4me1' : [99.99, 99.98],
+                           'h3k4me3' : [99.41, 99.86],
+                           'h3k27ac' : [98.49, 98.84],
+                           'h3k27me3' : [98.38, 99.11],
+                           'h3k36me3' : [99.39, 99.79]}
+            }
+        }
+    }
+    
+    def get_pc_histone_stability(self, peak_caller, pc_params, histone):
+        return self.pc_stability_data[pc_params][peak_caller][histone]
+    
+    def get_pc_stability(self, peak_caller, pc_params, histones):
+        res = []
+        for h in histones:
+            res.append(self.get_pc_histone_stability(peak_caller, pc_params, h))
+            
+        return res
+    
+    def get_pc_histone_similarity(self, peak_callers, pc_params, histone):
+        return self.pc_similarity_data[pc_params][peak_callers[0]][peak_callers[1]][histone]
+    
     def get_pc_histone_stability(self, peak_caller, pc_params, histone):
         return self.pc_stability_data[pc_params][peak_caller][histone]
     
