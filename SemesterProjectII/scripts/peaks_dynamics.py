@@ -2,7 +2,7 @@ import os
 import numpy as np
 from matplotlib import pyplot as plt
 
-def peak_dynamics(files):
+def full_peak_dynamics(files):
     # takes list of files in .bed format and returns summary peak statistics for each
     n_peaks = []
     mean_len = []
@@ -36,6 +36,19 @@ def peak_dynamics(files):
     
     return n_splitted, n_united, n_peaks, mean_len
 
+
+def peak_dynamics(folder, file_end, ind):
+    # returns only statistics of number of peaks and average peak length dynamics 
+    filenames = get_filenames(folder, file_end, ind)
+    
+    ns, mean_lens = [], []
+    for f in filenames:
+        p = read_peaks(f)
+        ns.append(p.shape[0])
+        mean_lens.append(np.mean(p[:, 2] - p[:, 1]))
+    
+    return ns, mean_lens
+
 def read_peaks(fname):
     # takes file in .bed format as input and returns array of [chrom, peak_start, peak_end] 
     peaks = []
@@ -55,7 +68,7 @@ def read_peaks(fname):
     return np.asarray(peaks)
 
 def cover(peaks1, peaks2):
-    # returns array of shape (peaks1.shape[0], ) with number of peaks from peaks2 that are in peak from peaks1
+    # returns array of shape (peaks1.shape[0], ) with number of peaks from peaks2 that are embedded in peak from peaks1
     curr_chr = peaks1[0][0]
     idx1 = 0
     N1 = peaks1.shape[0]
@@ -114,3 +127,18 @@ def cover(peaks1, peaks2):
             if idx1 == -1:
                 break
     return res
+
+
+def get_filenames(folder, file_end, ind=[i for i in range(10)]):
+    filenames = []
+    for f in os.listdir(folder):
+        if f.endswith(file_end):
+            if not '10' in f:
+                filenames.append(folder + f)
+                
+    filenames = sorted(filenames)
+    filenames_ = []
+    for i in ind:
+        filenames_.append(filenames[i])
+    
+    return filenames_
