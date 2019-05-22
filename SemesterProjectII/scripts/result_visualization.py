@@ -1,6 +1,8 @@
 from project_structure import fdr_05_path, fdr_e6_path
 from jbr_gb_data import AlgorithmsStats
-from peak_dynamics import full_peak_dynamics, peak_dynamics
+from peaks_dynamics import full_peak_dynamics, peak_dynamics
+from matplotlib import pyplot as plt
+import numpy as np
 
 alg_s = AlgorithmsStats()
 histones = ['h3k4me1', 'h3k4me3', 'h3k27ac', 'h3k27me3', 'h3k36me3']
@@ -20,7 +22,6 @@ def plot_peaks_dynamics(path_dict, ind, fdr):
             means = means + m
     
     x = np.asarray([i * 0.25 for i in range(len(ind))])
-    
     plt.figure(figsize=(10, 5))
     for i in range(0, len(histones) * len(algorithms) * len(ind), len(algorithms) * len(ind)):
         for j in range(len(algorithms)):
@@ -29,7 +30,7 @@ def plot_peaks_dynamics(path_dict, ind, fdr):
         x += 0.5
     plt.legend(algorithms)
     plt.xticks([2.5, 8.25, 14, 19.75, 25.5], ['h3k4me1', 'h3k4me3', 'h3k27ac', 'h3k27me3', 'h3k36me3'])
-    plt.title(f'Number of peaks; FDR {fdr}')
+    plt.title(f'Number of peaks; {fdr}')
     plt.savefig(f'../result/n_peaks_fdr_{fdr}.png')
     plt.show()
     
@@ -42,7 +43,7 @@ def plot_peaks_dynamics(path_dict, ind, fdr):
         x += 0.5
     plt.legend(algorithms)
     plt.xticks([2.5, 8.25, 14, 19.75, 25.5], ['h3k4me1', 'h3k4me3', 'h3k27ac', 'h3k27me3', 'h3k36me3'])
-    plt.title(f'Average peak length; FDR {fdr}')
+    plt.title(f'Average peak length; {fdr}')
     plt.savefig(f'../result/len_peaks_fdr_{fdr}.png')
     plt.show()
 
@@ -82,7 +83,7 @@ def plot_peak_set_comparison(fdr):
         i = 0
 
         for pc in algorithms:
-            others = algorithms
+            others = algorithms.copy()
             others.remove(pc)
             for other in others:
                 sim = AlgorithmsStats().get_pc_histone_similarity([pc, other], fdr, h)
@@ -102,7 +103,7 @@ def plot_peak_set_comparison(fdr):
 if __name__ == "__main__":
     ind = [i for i in range(7)]
     for fdr, path_dict in zip(fdrs, [fdr_05_path, fdr_e6_path]):
-        plot_peaks_dynamics(path_dict, , fdr)
+        plot_peaks_dynamics(path_dict, ind, fdr)
         plot_peak_set_comparison(fdr)
         
     plot_true_peaks_comparison()

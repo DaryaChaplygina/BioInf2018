@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from matplotlib import pyplot as plt
 
 def full_peak_dynamics(files):
     # takes list of files in .bed format and returns summary peak statistics for each
